@@ -1,8 +1,14 @@
 const API = 'https://ron-swanson-quotes.herokuapp.com/v2/quotes'
 
 fetch(API)
-  .then((res) => res.json())
-  .then((data) => (document.querySelector('.quote').innerText = data[0]))
+  .then((res) => {
+    console.log(res)
+    return res.json()
+  })
+  .then((data) => {
+    console.log('this is the quote', data, API)
+    document.querySelector('.quote').innerText = data[0]
+  })
 
 // ====
 const el = document.querySelector('h2')
@@ -18,3 +24,33 @@ function random(array) {
 var recipeName = `My ${random(basilChefs)}'s ${random(basilTexture)} Pesto`
 
 el.innerText = recipeName
+
+// ===
+
+var modalOuter = document.querySelector('.modal-outer')
+var modalInner = document.querySelector('.modal')
+
+var betaContent = `
+<h3>Oooops!</h3>
+<p>Wow! Nothing works!<p>
+`
+var buttonContent = `
+<h2>Coming Soon</h2>
+<p>This feature coming soon.<p>
+<a class="closer" href="#0">✖︎</a>
+`
+
+function showPopover(event) {
+  if (event.target.matches('.beta')) {
+    modalInner.innerHTML = betaContent
+    modalOuter.classList.add('open')
+  } else if (event.target.closest('nav ul')) {
+    modalInner.innerHTML = buttonContent
+    modalOuter.classList.add('open')
+  } else if (event.target.matches('.closer, .modal-outer')) {
+    modalOuter.classList.remove('open')
+  } else return
+  event.preventDefault()
+}
+
+document.addEventListener('click', showPopover)
